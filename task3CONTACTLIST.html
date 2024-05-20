@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+</head>
+<body>
+  <h2>Landing Page</h2>
+  <ul id="contactList"></ul>
+  <button onclick="redirectToForm()">Add Contact</button>
+
+  <script type="module">
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+    import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+apiKey: "AIzaSyDZd_sqzypJ8ktri2gLkIquO4W37DfR4L8",
+authDomain: "csm3103-lab6-task3-121e1.firebaseapp.com",
+projectId: "csm3103-lab6-task3-121e1",
+storageBucket: "csm3103-lab6-task3-121e1.appspot.com",
+messagingSenderId: "32948497175",
+appId: "1:32948497175:web:4dc1793751a1d5565de552",
+measurementId: "G-1X1RSZERFV"
+};
+
+    // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+        const db = getDatabase();
+
+    const contactList = document.getElementById('contactList');
+    const contactsRef = ref(db, 'contacts');
+    onValue(contactsRef, (snapshot) => {
+      contactList.innerHTML = '';
+      snapshot.forEach((childSnapshot) => {
+        const contactData = childSnapshot.val();
+        const listItem = document.createElement('li');
+        listItem.innerText = `${contactData.name} - ${contactData.address} - ${contactData.phone}`;
+        contactList.appendChild(listItem);
+      });
+    });
+
+    function redirectToForm() {
+      window.location.href = "task3authoLogin.html";
+    }
+  </script>
+</body>
+</html>

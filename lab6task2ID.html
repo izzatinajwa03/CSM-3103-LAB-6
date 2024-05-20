@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+<h2>Simple Input</h2>
+  </head>
+  <body>
+    <div class="row">
+      <h2>Delete Data</h2>
+      <form id="deleteForm">
+        <label for="deleteID">Enter ID to delete:</label>
+        <input type="text" id="deleteID" name="id"><br><br>
+        <button type="submit" id="btnDelete">Delete Data</button>
+      </form>
+    </div>
+<script type="module">
+    //Firebase code
+
+    // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+  import { database, ref, set } from "http://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDRt9ufOyDawqTWJXsEljJ_V0RRl0aHSE4",
+    authDomain: "csm3103lab6task2.firebaseapp.com",
+    projectId: "csm3103lab6task2",
+    storageBucket: "csm3103lab6task2.appspot.com",
+    messagingSenderId: "293759709735",
+    appId: "1:293759709735:web:e6b20709087de6a115d402",
+    measurementId: "G-TD2MSVVSXS"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = database();
+const deleteForm = document.querySelector("#deleteForm");
+
+//your code
+
+deleteForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(deleteForm);
+        const idToDelete = formData.get("id");
+       
+
+        // Check if the ID exists before attempting to delete
+        const recordRef = ref(db, "task2ID/" + idToDelete);
+        get(recordRef)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              // Delete the record if it exists
+              remove(recordRef)
+                .then(() => {
+                  alert("Record with ID " + idToDelete + " deleted successfully!");
+                  deleteForm.reset(); // Reset the form fields after successful deletion
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+            } else {
+              alert("No record found with ID " + idToDelete);
+            }
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      });
+</script>
+</body>
+
+</html>
